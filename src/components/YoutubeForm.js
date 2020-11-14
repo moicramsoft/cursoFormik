@@ -15,18 +15,18 @@ const onSubmit=values=>{
 }
 
 const validate= values=>{
-    let errros ={}
+    let errors ={}
     if(!values.name){
-        errros.name='Requered!'
+        errors.name='Required!'
     }
     if(!values.email){
-        errros.email='Requered!'
+        errors.email='Required!'
     }
     if(!values.channel){
-        errros.channel='Requered!'
-    }else if (!/^[A-Z0-9._%+-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/i.test(values.email)){
-        errros.channel='Invalid email format!'
-    }  return errros
+        errors.channel='Required!'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+       errors.email = 'Invalid email format!'
+       }  return errors
 }
 function YoutubeForm() {
     const formik=useFormik({
@@ -34,17 +34,30 @@ function YoutubeForm() {
                 onSubmit,
                 validate
        })
+       // Ao habilitar linha abaixo mostramos na console os valores que foram digitados pelo usuário
+       //console.log('Form value', formik.values)
+       
+       console.log('Form errors', formik.errors)
+
     return (
         <div>
             <form onSubmit={formik.handleSubmit}>
+                <div className='form-control'>
                 <label htmlFor='name'>Name</label>
-                <input type='text' id='name' name='name'                 onChange={formik.handleChange} vale={formik.values.name}/>
-               
+                <input type='text' id='name' name='name'      onChange={formik.handleChange} vale={formik.values.name}/>
+               {formik.errors.name?<div className='error'>{formik.errors.name}</div> : null}
+               </div>
+               <div className='form-control'>
+
                 <label htmlFor='email'>E-mail</label>
-                <input type='text' id='email' name='email'  onChange={formik.handleChange} vale={formik.values.email}/>
-               
+                <input type='text' id='email' name='email'    onChange={formik.handleChange} vale={formik.values.email}/>
+                {formik.errors.email?<div className='error'>{formik.errors.email}</div> : null}
+                </div>
+               <div className='form-control'>
                 <label htmlFor='channel'>Channel</label>
-                <input type='text' id='channel' name='channel'  onChange={formik.handleChange} vale={formik.values.channel}/>
+                <input type='text' id='channel' name='channel'onChange={formik.handleChange} vale={formik.values.channel}/>
+                {formik.errors.channel?<div className='error'>{formik.errors.channel}</div> : null}
+                </div>
        <button type='submit' >Submit</button>
        </form>
         </div>
