@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import TextError from "./TextError";
 /*Aqui podemos setar valores iniciais 
         Na console do Browser será exibido os valores digitados devidos ao 
         onChange={formik.handleChange} vale={formik.values.name}*/
@@ -8,6 +9,14 @@ const initialValues = {
   name: "",
   email: "",
   channel: "",
+  comments: "",
+  address: "",
+  //Inicio Objetos Aninhados
+  social:{
+      facebook:'',
+      twitter:''
+  }
+    //Fim Objetos Aninhados
 };
 /* Ao pressionar o submit exibimos os valores na console do Browser
  */
@@ -19,6 +28,8 @@ const validationSchema = Yup.object({
   name: Yup.string().required("Required!"),
   email: Yup.string().email("Invalid email format").required("Required!"),
   channel: Yup.string().required("Required!"),
+  comments: Yup.string().required("Required!"),
+  address: Yup.string().required("Required!"),
 });
 function YoutubeForm() {
   // Ao habilitar linha abaixo mostramos na console os valores que foram digitados pelo usuário
@@ -37,19 +48,58 @@ function YoutubeForm() {
         <div className="form-control">
           <label htmlFor="name">Name</label>
           <Field type="text" id="name" name="name" />
-          <ErrorMessage name='name' />
+          <ErrorMessage name="name" component={TextError} />
         </div>
         <div className="form-control">
           <label htmlFor="email">E-mail</label>
           <Field type="text" id="email" name="email" />
-          <ErrorMessage name='email' />
+          <ErrorMessage name="email" component={TextError} />
         </div>
         <div className="form-control">
           <label htmlFor="channel">Channel</label>
           <Field type="text" id="channel" name="channel" />
-          <ErrorMessage name='channel' />
-
+          <ErrorMessage name="channel" component={TextError} />
         </div>
+
+        <div className="form-control">
+          <label htmlFor="comments">Comnents</label>
+          <Field as="textarea" id="comments" name="comments" />
+          <ErrorMessage name="comments" component={TextError} />
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="address">Address</label>
+          <Field name="address" />
+          {(props) => {
+            const { field, meta } = props;
+            console.log("Render props", props);
+            return (
+              <div>
+                <input type="text" id="address" {...field} />
+                {meta.touched && meta.error ? <div>{meta.error}</div> : null}
+              </div>
+            );
+          }}
+
+       <ErrorMessage name='address'>
+                {error => <div className='error'>{error}</div>}
+              </ErrorMessage>
+        </div>
+
+
+        <div className="form-control">
+          <label htmlFor="facebook">Facebook</label>
+          <Field type="text" id="facebook" name="social.facebook" />
+          <ErrorMessage name="facebook" component={TextError} />
+          </div>
+
+          <div className="form-control">
+          <label htmlFor="twitter">Twitter</label>
+          <Field type="text" id="twitter" name="social.twitter" />
+          <ErrorMessage name="twitter" component={TextError} />
+          </div>
+
+          
         <button type="submit">Submit</button>
       </Form>
     </Formik>
